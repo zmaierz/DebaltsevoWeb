@@ -1,6 +1,41 @@
+@font-face {
+    font-family: "Roboto";
+    src: url("./engine/templates/media/fonts/Robot.ttf");
+}
+
+body {
+    font-family: "Roboto", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 header {
     width: 100%;
     height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.header-left-block {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-left-block__logo {
+    width: 70px;
+    height: 70px;
+}
+
+.header-left-block__logo img {
+    width: 100%;
+    height: 100%;
+}
+
+.header-left-block__name {
+    width: 370px;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
