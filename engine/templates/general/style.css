@@ -7,6 +7,8 @@
     --soft-color: #dbe2ef;
     --general-color: #3f72af;
     --rough-color: #112d4e;
+    --hover-btn: #dae8fc;
+    --hover-btn-border: #6f92bf;
 }
 
 body {
@@ -20,7 +22,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
     margin: 0;
     background-color: var(--soft-color);
 }
@@ -29,6 +30,7 @@ header {
     display: flex;
     align-items: center;
     gap: 20px;
+    padding: 0 20px;
 }
 
 .header-left-block__logo {
@@ -48,6 +50,61 @@ header {
     flex-direction: column;
     font-size: 18px;
     font-weight: 600;
+}
+
+.header-right-block {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.header-right-block__menu {
+    border: solid black 1px;
+    border-radius: 12px;
+    padding: 12px 20px;
+    background-color: white;
+}
+
+.header-right-block__menu ul {
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.header-right-block__menu li {
+    list-style-type: none;
+    padding: 5px;
+    border-radius: 7px;
+    border: solid white 1px;
+}
+
+.header-right-block__menu a {
+    text-decoration: none;
+    color: black
+}
+
+.header-right-block__menu li:hover {
+    background-color: var(--hover-btn);
+    border: solid var(--hover-btn-border) 1px;
+}
+
+.header-right-block__visually-impaired-version {
+    padding: 7px 10px;
+    border-radius: 12px;
+    border: solid black 1px;
+    background-color: white;
+}
+
+.header-right-block__visually-impaired-version a {
+    text-decoration: none;
+    color: black;
+}
+
+.header-right-block__visually-impaired-version:hover {
+    background-color: var(--hover-btn);
 }
 
 .container {
