@@ -61,34 +61,52 @@ header {
 }
 
 .header-right-block__menu {
+    padding: 12px 20px;
     border: solid black 1px;
     border-radius: 12px;
-    padding: 12px 20px;
     background-color: white;
 }
 
-.header-right-block__menu ul {
+.header-menu {
     display: flex;
     gap: 30px;
     margin: 0;
     padding: 0;
 }
 
-.header-right-block__menu li {
-    list-style-type: none;
+.header-menu li {
     padding: 5px;
     border-radius: 7px;
     border: solid white 1px;
+    list-style-type: none;
 }
 
-.header-right-block__menu a {
+.header-menu a {
     text-decoration: none;
     color: black
 }
 
-.header-right-block__menu li:hover {
+.header-menu li:hover {
     background-color: var(--hover-btn);
     border: solid var(--hover-btn-border) 1px;
+}
+
+.header-menu__sub {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 0;
+    background-color: white;
+}
+
+.header-menu__sub li {
+    border: solid black 1px;
+}
+
+.header-menu__li-sub1:hover .header-menu__ul-sub1 {
+    display: flex;
+    position: absolute;
 }
 
 .header-right-block__visually-impaired-version {
