@@ -87,8 +87,8 @@ header {
 }
 
 .header-menu li:hover {
-    background-color: var(--hover-btn);
     border: solid var(--hover-btn-border) 1px;
+    background-color: var(--hover-btn);
 }
 
 .header-menu__sub {
@@ -111,8 +111,8 @@ header {
 
 .header-right-block__visually-impaired-version {
     padding: 7px 10px;
-    border-radius: 12px;
     border: solid black 1px;
+    border-radius: 12px;
     background-color: white;
 }
 
