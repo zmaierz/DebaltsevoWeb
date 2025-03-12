@@ -3,7 +3,14 @@
     src: url("./engine/templates/media/fonts/Robot.ttf");
 }
 
+:root {
+    --soft-color: #dbe2ef;
+    --general-color: #3f72af;
+    --rough-color: #112d4e;
+}
+
 body {
+    margin: 0;
     font-family: "Roboto", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -14,6 +21,8 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    margin: 0;
+    background-color: var(--soft-color);
 }
 
 .header-left-block {
@@ -33,9 +42,11 @@ header {
 }
 
 .header-left-block__name {
-    width: 370px;
+    width: 430px;
     display: flex;
     flex-direction: column;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .container {
