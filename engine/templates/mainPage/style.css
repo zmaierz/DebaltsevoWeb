@@ -1,0 +1,9 @@
+.welcome-block__container-content-logo {
+    width: 150px;
+    height: 150px;
+}
+
+.welcome-block__container-content-logo img {
+    width: 100%;
+    height: 100%;
+}
