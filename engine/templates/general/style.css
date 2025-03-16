@@ -125,14 +125,6 @@ header {
     background-color: var(--hover-btn);
 }
 
-.container {
-    display: flex;
-}
-
-.content {
-    width: 80%;
-}
-
 .left-block {
     width: 20%;
 }
