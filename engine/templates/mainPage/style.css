@@ -12,11 +12,10 @@
 
 .main-page-block {
     width: 700px;
-    height: 180px;
     border: solid black 1px;
     background-color: var(--hover-btn);
     border-radius: 30px;
-    padding: 0 10px 40px 40px
+    padding: 0 10px 30px 40px
 }
 
 .main-page-block__container {
