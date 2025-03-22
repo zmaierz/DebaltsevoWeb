@@ -14,8 +14,20 @@ class Database {
         $this->database = $config["database"];
         $this->port = $config["port"];
 
-        if ($checkConnection) {
-            
+        try {
+            if ($checkConnection) {
+                $conn = $this->getConn();
+                if (!$conn) {
+                    throw new db_connect_error;
+                }
+            }
+        }
+        catch (db_config_exception $ex) {
+            echo "Какая то параша...";
+        }
+        catch (db_connect_error $ex) {
+            echo "Какая то параша...";
+            echo $ex;
         }
     }
 

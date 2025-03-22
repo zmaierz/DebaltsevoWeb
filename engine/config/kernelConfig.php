@@ -2,7 +2,7 @@
 
 function getKernelConfig(): array {
     return [
-        "debug" => false, # bool
+        "debug" => true, # bool
         "" => "" # temp
     ];
 }
