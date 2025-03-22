@@ -12,7 +12,7 @@ class Kernel {
         $this->DBConfig = getDBConfig();
         $this->kernelConfig = getKernelConfig();
 
-        $this->DB = new Database($this->DBConfig);
+        $this->DB = new Database($this->DBConfig, $this->$kernelConfig["debug"]);
     }
 }
 

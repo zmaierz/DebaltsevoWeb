@@ -18,6 +18,19 @@ class Database {
             
         }
     }
+
+    private function getConn(): ?mysqli {
+        $conn = new mysqli(
+            $this->hostname,
+            $this->username,
+            $this->password,
+            $this->database,
+        );
+
+        if ($conn->connect_error)
+            return false;
+        return $conn;
+    }
 }
 
 ?>
