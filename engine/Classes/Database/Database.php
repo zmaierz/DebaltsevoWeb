@@ -7,12 +7,16 @@ class Database {
     private ?string $database;
     private ?int $port;
 
-    public function __construct(?array $config) {
+    public function __construct(?array $config, ?bool $checkConnection) {
         $this->username = $config["username"];
         $this->password = $config["password"];
         $this->hostname = $config["hostname"];
         $this->database = $config["database"];
         $this->port = $config["port"];
+
+        if ($checkConnection) {
+            
+        }
     }
 }
 
