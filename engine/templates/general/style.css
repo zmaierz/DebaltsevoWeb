@@ -23,6 +23,7 @@ header {
     align-items: center;
     justify-content: space-between;
     margin: 0;
+    padding: 10px 0;
     background-color: var(--soft-color);
 }
 
@@ -69,6 +70,7 @@ header {
 
 .header-menu {
     display: flex;
+    align-items: center;
     gap: 30px;
     margin: 0;
     padding: 0;
@@ -78,6 +80,7 @@ header {
     padding: 5px;
     border-radius: 7px;
     border: solid white 1px;
+    text-align: center;
     list-style-type: none;
 }
 
@@ -103,6 +106,7 @@ header {
 .header-menu__li-sub1:hover .header-menu__ul-sub1 {
     display: flex;
     position: absolute;
+    border: solid black 1px;
 }
 
 .header-right-block__visually-impaired-version {
