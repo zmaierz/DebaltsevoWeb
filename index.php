@@ -18,32 +18,9 @@
 		?>
 		<div class="container">
 			<div class="content">
-				<div class="content__welcome-block main-page-block">
-					<div class="main-page-block__container">
-						<h2 class="main-page-block__container-title">
-							2025 Год объявлен Президентом России Годом защитника Отечества!
-						</h2>
-						<div class="main-page-block__container-content">
-							<div class="main-page-block__container-content-logo">
-								<img src="engine/templates/media/images/logo_example.gif" alt="Пример изображения">
-							</div>
-							<div class="main-page-block__container-content-text">
-								Этот год приурочен к 80-летию Великой Победы и станет данью уважения всем, кто сражался за Отечество в разные исторические периоды. Президент добавил, что Год защитника Отечества будет учрежден во славу отцов, дедов и прадедов, сокрушивших нацизм
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="content__main-page-block main-page-block">
-					<div class="main-page-block__container">
-						<h2 class="main-page-block__container-title">
-							Уважаемые посетители сайта!
-						</h2>
-						<div class="main-page-block__container-text">
-							Хабаровскому промышленно-экономическому техникуму исполнилось 70 лет. За эти годы мы прошли путь от лесотехнического техникума до многоуровнего учебного заведения. В настоящее время на отделениях подготовки квалифицированных рабочих и служащих специалистов среднего звена профессионального образования обучается более 2000 студентов.
-							Надеемся, что посетив наш сайт, вы сделаете правильный выбор будущей специальности или профессии. А мы со своей стороны сделаем все возможное для получения вами качественного современного образования
-						</div>
-					</div>
-				</div>
+				<?php
+					$app->showMainPageBlocks();
+				?>
 				<div class="content__news-block main-page-block">
 					<div class="news-block__container">
 						<h1 class="news-block__container-title">

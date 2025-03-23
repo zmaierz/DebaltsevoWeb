@@ -58,6 +58,30 @@ class Kernel {
         echo "<style>" . $layout["style"] . $layout["style-mobile"] . "</style>" . "<script>" . $layout["script"] . "</script>";
     }
 
+    public function showMainPageBlocks() {
+        $data = $this->DB->getData("mainPageContent", array("ID", "title", "image", "description"));
+        $blockTemplate = $this->getBlock("mainPageBlock", getStyle: false);
+        $blockPhotoTemplate = $this->getBlock("mainPagePhotoBlock", getStyle: false);
+        $blockTemplateStyle = $this->getBlock("mainPageBlock", getOnlyStyle: true);
+
+        foreach ($data as $block) {
+            // echo "<pre>"; print_r($block); echo "</pre>";
+            if ($block["image"] == "") {
+                $outHtml = $blockTemplate;
+                $outHtml = str_replace("#title#", $block["title"], $outHtml);
+                $outHtml = str_replace("#content#", $block["description"], $outHtml);
+            }
+            else {
+                $outHtml = $blockPhotoTemplate;
+                $outHtml = str_replace("#title#", $block["title"], $outHtml);
+                $outHtml = str_replace("#image#", $block["image"], $outHtml);
+                $outHtml = str_replace("#content#", $block["description"], $outHtml);
+            }
+            echo $outHtml;
+        }
+        echo $blockTemplateStyle;
+    }
+
     public function showWarning(?string $exceptionMessage, ?bool $isException = false): void {
         if ($isException)
             $path = $this->modulesPath . "/showException//";
@@ -93,6 +117,22 @@ class Kernel {
         $html = IO::getFileContent($path);
 
         return $html;
+    }
+
+    private function getBlock(?string $name, ?bool $getStyle = true, ?bool $getOnlyStyle = false): string {
+        $html = IO::getFileContent("$this->modulesPath/$name/content.html");
+        $css = IO::getFileContent("$this->modulesPath/$name/style.css");
+        $cssMobile = IO::getFileContent("$this->modulesPath/$name/style-mobile.css");
+        $script = IO::getFileContent("$this->modulesPath/$name/script.js");
+
+        if (!$getStyle)
+            $outHtml = $html;
+        else if ($getOnlyStyle)
+            $outHtml = "<style> $css $cssMobile </style> <script> $script </script>";
+        else
+            $outHtml = "$html <style> $css $cssMobile </style> <script> $script </script>";
+
+        return $outHtml;
     }
 
     private function getLayout(?string $path): array {

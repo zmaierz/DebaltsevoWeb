@@ -32,7 +32,36 @@ class Database {
         catch (db_connect_error $ex) {
             $this->errorMSG = $ex;
         }
-        
+    }
+
+    public function getData(?string $table, ?array $rows): ?array {
+        $out = array();
+        try {
+            $query = "SELECT * FROM $table";
+            $conn = $this->getConn();
+
+            if ($result = $conn->query($query)) {
+                $j = 0;
+                foreach ($result as $row) {
+                    foreach ($rows as $i) {
+                        $out[$j][$i] = $row[$i];
+                    }
+                    $j += 1;
+                }
+                return $out;
+            }
+            else {
+                throw new db_connect_error;
+            }
+        }
+        catch (db_config_exception $ex) {
+            $this->errorMSG = $ex;
+            return null;
+        }
+        catch (db_connect_error $ex) {
+            $this->errorMSG = $ex;
+            return null;
+        }
     }
 
     public function getErrorMSG(): string {
