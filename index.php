@@ -27,54 +27,9 @@
 							Наши новости
 						</h1>
 						<div class="news-block__container-news">
-							<div class="news-block__container-new news-block-new-container">
-								<h2 class="news-block-new-container__title">
-									Заголовок
-								</h2>
-								<div class="news-block-new-container__text">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae ipsum ut sem faucibus dictum sed nec augue. Ut nisi arcu, finibus non posuere sed, laoreet at ligula.
-								</div>
-							</div>
-							<div class="news-block__container-new news-block-new-container">
-								<h2 class="news-block-new-container__title">
-									Заголовок
-								</h2>
-								<div class="news-block-new-container__text">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae ipsum ut sem faucibus dictum sed nec augue. Ut nisi arcu, finibus non posuere sed, laoreet at ligula.
-								</div>
-							</div>
-							<div class="news-block__container-new news-block-new-container">
-								<h2 class="news-block-new-container__title">
-									Заголовок
-								</h2>
-								<div class="news-block-new-container__text">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae ipsum ut sem faucibus dictum sed nec augue. Ut nisi arcu, finibus non posuere sed, laoreet at ligula.
-								</div>
-							</div>
-							<div class="news-block__container-new news-block-new-container">
-								<h2 class="news-block-new-container__title">
-									Заголовок
-								</h2>
-								<div class="news-block-new-container__text">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae ipsum ut sem faucibus dictum sed nec augue. Ut nisi arcu, finibus non posuere sed, laoreet at ligula.
-								</div>
-							</div>
-							<div class="news-block__container-new news-block-new-container">
-								<h2 class="news-block-new-container__title">
-									Заголовок
-								</h2>
-								<div class="news-block-new-container__text">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae ipsum ut sem faucibus dictum sed nec augue. Ut nisi arcu, finibus non posuere sed, laoreet at ligula.
-								</div>
-							</div>
-							<div class="news-block__container-new news-block-new-container">
-								<h2 class="news-block-new-container__title">
-									Заголовок
-								</h2>
-								<div class="news-block-new-container__text">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae ipsum ut sem faucibus dictum sed nec augue. Ut nisi arcu, finibus non posuere sed, laoreet at ligula.
-								</div>
-							</div>
+							<?php
+								$app->showMainPageNews();
+							?>
 						</div>
 					</div>
 				</div>

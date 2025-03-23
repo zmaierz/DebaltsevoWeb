@@ -87,6 +87,25 @@ class Kernel {
         echo $blockTemplateStyle;
     }
 
+    public function showMainPageNews(?int $showCount = 6): void {
+        $htmlTemplate = $this->getBlock("mainPageNewsInnerContainer", getStyle: false);
+        $htmlStyleTemplate = $this->getBlock("mainPageNewsInnerContainer", getOnlyStyle: true);
+        $htmlOut = "";
+
+        $data = $this->DB->getData("news", array("ID", "title", "short-descr"));
+
+        for ($i = count($data) - $showCount; $i < count($data); $i++) {
+            $temp = $htmlTemplate;
+            $temp = str_replace("#title#", $data[$i]["title"], $temp);
+            $temp = str_replace("#content#", $data[$i]["short-descr"], $temp);
+            $htmlOut .= $temp;
+        }
+
+        $htmlOut .= $htmlStyleTemplate;
+        
+        echo $htmlOut;
+    }
+
     public function showWarning(?string $exceptionMessage, ?bool $isException = false): void {
         if ($isException)
             $path = $this->modulesPath . "/showException//";
