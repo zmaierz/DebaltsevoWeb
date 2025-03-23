@@ -1,0 +1,34 @@
+.main-page-block__container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main-page-block__container-title {
+    font-size: 17px;
+    width: 65%;
+    text-align: center;
+}
+
+.main-page-block__container-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.main-page-block__container-content-text {
+    width: 60%;
+}
+
+.main-page-block__container-content-logo {
+    width: 120px;
+    height: 120px;
+}
+
+.main-page-block__container-content-logo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
