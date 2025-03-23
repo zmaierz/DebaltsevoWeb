@@ -7,109 +7,15 @@
 	<head>
 		<meta charset="utf-8">
 		<title> Debaltsevo Web | Developer version </title>
-		<link rel="stylesheet" href="engine/templates/general/style.css">
-		<link rel="stylesheet" href="engine/templates/general/style-mobile.css">
-		<link rel="stylesheet" href="engine/templates/mainPage/style.css">
-		<link rel="stylesheet" href="engine/templates/mainPage/style-mobile.css">
-		<script src="engine/templates/general/script.js"></script>
-		<script src="engine/templates/mainPage/script.js"></script>
+		<?php 
+			$app->showGeneralLayout();
+			$app->showPageLayout("mainPage");
+		?>
 	</head>
 	<body>
-		<header>
-			<div class="header__left-block header-left-block">
-				<div class="header-left-block__logo">
-					<a href="/">
-						<img src="engine/templates/media/images/logo_example.gif">
-					</a>
-				</div>
-				<div class="header-left-block__name">
-					<span>Донецкая народная республика</span>
-					<span>Государственное бюджетное профессиональное образовательное учреждение </span>
-					<span>"Дебальцевский многопрофильный техникум"</span>
-				</div>
-			</div>
-			<div class="header__right-block header-right-block">
-				<div class="header-right-block__menu">
-					<ul class="header-right-block__menu-ul header-menu">
-						<li>
-							<a href="/">Главная</a>
-						</li>
-						<li class="header-menu__li-sub1">
-							<a href="#">Сведения об образовательной организации</a>
-							<ul class="header-menu__sub header-menu__ul-sub1">
-								<a href="#"><li>Основные сведения</li></a>
-								<a href="#"><li>Структура и органы управления образовательной организацией</li></a>
-								<a href="#"><li>Документы</li></a>
-								<a href="#"><li>Образование</li></a>
-								<a href="#"><li>Образовательные стандарты</li></a>
-								<a href="#"><li>Руководство. Педагогический состав</li></a>
-								<a href="#"><li>Стипендии и иные виды материальной поддержки</li></a>
-								<a href="#"><li>Материально-техническое обеспечение и оснащенность образовательного процесса</li></a>
-								<a href="#"><li>Финансово-хозяйственная деятельность</li></a>
-								<a href="#"><li>Вакантные места для приема</li></a>
-								<a href="#"><li>Противодействие коррупции</li></a>
-							</ul>
-						</li>
-						<li class="header-menu__li-sub1">
-							<a href="#">Студентам</a>
-							<ul class="header-menu__sub header-menu__ul-sub1">
-								<a href="#"><li>Комплексно-целевые программы</li></a>
-								<a href="#"><li>Стипендии и иные виды материальной поддержки</li></a>
-								<a href="#"><li>Общежитие</li></a>
-								<a href="#"><li>График учебного процесса</li></a>
-								<a href="#"><li>Дополнительное образование</li></a>
-								<a href="#"><li>WorldSkills</li></a>
-								<a href="#"><li>Фонд поддержки детей</li></a>
-							</ul>
-						</li>
-						<li class="header-menu__li-sub1">
-							<a href="#">Абитуриентам</a>
-							<ul class="header-menu__sub header-menu__ul-sub1">
-								<a href="#"><li>Документы об организации работы приёмной комиссии</li></a>
-								<a href="#"><li>Документы для поступления</li></a>
-								<a href="#"><li>Контрольные цифры приёма студентов</li></a>
-								<a href="#"><li>Наши процессии</li></a>
-								<a href="#"><li>Вакантные места приёма</li></a>
-								<a href="#"><li>Порядок приёма</li></a>
-								<a href="#"><li>Количество поданных заявлений</li></a>
-							</ul>
-						</li>
-						<li class="header-menu__li-sub1">
-							<a href="#">Выпускникам</a>
-							<ul class="header-menu__sub header-menu__ul-sub1">
-								<a href="#"><li>Социальные партнёры</li></a>
-								<a href="#"><li>Советы психолога</li></a>
-								<a href="#"><li>Центр трудоустройства выпускников</li></a>
-							</ul>
-						</li>
-						<li class="header-menu__li-sub1">
-							<a href="#">Наша жизнь</a>
-							<ul class="header-menu__sub header-menu__ul-sub1">
-								<a href="#"><li>Новости</li></a>
-								<a href="#"><li>Фотогалерея</li></a>
-								<a href="#"><li>Лучшие выпускники</li></a>
-							</ul>
-						</li>
-						<li>
-							<a href="#">Контакты</a>
-						</li>
-						<li class="header-menu__li-sub1"> <!-- Fix that! -->
-							<a href="#">Информация</a>
-							<ul class="header-menu__sub header-menu__ul-sub1">
-								<a href="#"><li>Материалы</li></a>
-								<a href="#"><li>Вакансии</li></a>
-								<a href="#"></a><li>Контакты</li></a>
-							</ul>
-						</li>
-					</ul>
-				</div>
-				<div class="header-right-block__visually-impaired-version">
-					<a href="#">
-						Версия для слабовидящих
-					</a>
-				</div>
-			</div>
-		</header>
+		<?php
+			$app->ShowHeader();
+		?>
 		<div class="container">
 			<div class="content">
 				<div class="content__welcome-block main-page-block">
@@ -278,31 +184,8 @@
 				</div>
 			</div>
 		</div>
-		<footer>
-			<div class="footer__left-block footer-left-block">
-				<div class="footer-left-block__partners footer-partners">
-					<h2 class="footer-partners__title">
-						Наши партнеры:
-					</h2>
-					<div class="footer-partners__text">
-						<span>КГБ ПОУ ХПЭТ</span>
-						<span>ООО "Ромашка"</span>
-						<span>ООО "Лепесток"</span>
-					</div>
-				</div>
-			</div>
-			<div class="footer__right-block footer-right-block">
-				<div class="footer-right-block__title">
-					Дебальцевский многопрофильный техникум. 284700 ДНР
-				</div>
-				<div class="footer-right-block__sub-title">
-					г. Дебальцево, м-н "Восточный"
-				</div>
-				<div class="footer-right-block__copyright-text">
-					ВСЕ ПРАВА ЗАЩИЩЕНЫ. ПЕРЕПЕЧАТКА МЕТРИАЛОВ ТОЛЬКО С РАЗРЕШЕНИЯ АДМИНИСТРАЦИИ ТЕХНИКУМА И УКАЗАНИЕМ ССЫЛКИ НА ИСТОЧНИК.<br>
-					Продолжая пользование данным сайтом, выражаю своё согласие на обработку моих персональных данных с использованием интернет-сервиса "Яндекс.Метрика"
-				</div>
-			</div>
-		</footer>
+		<?php
+			$app->ShowFooter();
+		?>
 	</body>
 </html>

@@ -10,6 +10,8 @@ class Kernel {
 
     private ?string $modulesPath = "";
     private ?string $defaultModulesPath = "/engine/templates/modules";
+    private ?string $templatesPath = "";
+    private ?string $defaultTemplatesPath = "/engine/templates";
     
     public function __construct() {
         $this->DBConfig = getDBConfig();
@@ -19,6 +21,10 @@ class Kernel {
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
         }
 
+        if ($this->kernelConfig["templatePath"] == "") {
+            $this->templatesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultTemplatesPath;
+        }
+
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
         $dbError = $this->DB->getErrorMSG();
         if ($dbError != "") {
@@ -26,12 +32,38 @@ class Kernel {
         }
     }
 
+    public function showHeader(): void {
+        $block = $this->getSystemBlock("systemHeader");
+
+        echo $block;
+    }
+
+    public function showFooter(): void {
+        $block = $this->getSystemBlock("systemFooter");
+
+        echo $block;
+    }
+
+    public function showGeneralLayout(): void {
+        $layout = $this->getLayout($this->templatesPath . "/layout/general");
+
+        echo "<style>" . $layout["style"] . $layout["style-mobile"] . "</style>" . "<script>" . $layout["script"] . "</script>";
+    }
+
+    public function showPageLayout(?string $page): void {
+        $path = $this->templatesPath . "/layout/pages/" . $page;
+
+        $layout = $this->getLayout($path);
+
+        echo "<style>" . $layout["style"] . $layout["style-mobile"] . "</style>" . "<script>" . $layout["script"] . "</script>";
+    }
+
     public function showWarning(?string $exceptionMessage, ?bool $isException = false): void {
         if ($isException)
             $path = $this->modulesPath . "/showException//";
         else
             $path = $this->modulesPath . "/showError//";
-        
+
         $html = IO::getFileContent($path . "content.html");
         $css = IO::getFileContent($path . "style.css");
         $cssMobile = IO::getFileContent($path . "style-mobile.css");
@@ -42,6 +74,35 @@ class Kernel {
         $outHtml = $html . "<style>" . $css . $cssMobile . "</style>" . "<script>" . $script . "</script>";
 
         echo $outHtml;
+    }
+
+    private function getSystemBlock(?string $name): string {
+        switch ($name) {
+            case "systemHeader": {
+                $path = $this->templatesPath . "/header.html";
+                    break;
+            }
+            case "systemFooter": {
+                $path = $this->templatesPath . "/footer.html";
+                    break;
+            }
+            default: {
+                    break;
+            }
+        }
+        $html = IO::getFileContent($path);
+
+        return $html;
+    }
+
+    private function getLayout(?string $path): array {
+        $layout = array();
+
+        $layout["script"] = IO::getFileContent($path . "/script.js");
+        $layout["style"] = IO::getFileContent($path . "/style.css");
+        $layout["style-mobile"] = IO::getFileContent($path . "/style-mobile.css");
+
+        return $layout;
     }
 }
 
