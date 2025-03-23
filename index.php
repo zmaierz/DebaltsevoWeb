@@ -1,3 +1,7 @@
+<?php
+	include($_SERVER["DOCUMENT_ROOT"] . "/engine/kernel.php");
+	$app = new Kernel();
+?>
 <!DOCTYPE html>
 <html>
 	<head>
