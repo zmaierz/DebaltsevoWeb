@@ -1,7 +1,7 @@
 <?php
 
 class IO {
-    public static function getFileContent($path): ?string {
+    public static function getFileContent(?string $path): ?string {
         if (file_exists($path)) {
             $file = file_get_contents($path);
 
