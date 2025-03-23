@@ -4,6 +4,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/engine/modules/include.php";
 
 class Kernel {
     private ?Database $DB;
+    private ?ModuleManager $module;
     
     private ?array $DBConfig;
     private ?array $kernelConfig;
