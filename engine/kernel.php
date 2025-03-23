@@ -63,6 +63,11 @@ class Kernel {
         $blockTemplate = $this->getBlock("mainPageBlock", getStyle: false);
         $blockPhotoTemplate = $this->getBlock("mainPagePhotoBlock", getStyle: false);
         $blockTemplateStyle = $this->getBlock("mainPageBlock", getOnlyStyle: true);
+        
+        $dbError = $this->DB->getErrorMSG();
+        if ($dbError != "") {
+            $this->showWarning($dbError, isException: true);
+        }
 
         foreach ($data as $block) {
             // echo "<pre>"; print_r($block); echo "</pre>";

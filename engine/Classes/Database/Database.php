@@ -40,18 +40,28 @@ class Database {
             $query = "SELECT * FROM $table";
             $conn = $this->getConn();
 
-            if ($result = $conn->query($query)) {
-                $j = 0;
-                foreach ($result as $row) {
-                    foreach ($rows as $i) {
-                        $out[$j][$i] = $row[$i];
+            try {
+                if ($result = $conn->query($query)) {
+                    $j = 0;
+                    foreach ($result as $row) {
+                        foreach ($rows as $i) {
+                            $out[$j][$i] = $row[$i];
+                        }
+                        $j += 1;
                     }
-                    $j += 1;
+                    return $out;
                 }
-                return $out;
+                else {
+                    throw new db_connect_error;
+                }
             }
-            else {
-                throw new db_connect_error;
+            catch (mysqli_sql_exception $ex) {
+                $this->errorMSG = $ex;
+                return null;
+            }
+            catch (db_connect_error $ex) {
+                $this->errorMSG = $ex;
+                return null;
             }
         }
         catch (db_config_exception $ex) {
