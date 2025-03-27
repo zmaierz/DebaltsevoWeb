@@ -48,27 +48,36 @@ class Kernel {
     }
 
     public function showHeader(): void {
-        $modulePath = $this->templatesPath . "/modules/headerMenu";
-        $header1 = IO::getFileContent($modulePath . "/header_1.html");
-        $header2 = IO::getFileContent($modulePath . "/header_2.html");
-        include_once($modulePath . "/module.php");
+        $cacheHeader = IO::getFileContent($this->cachePath . "/system/header.html");
+        if ($cacheHeader == null) {
+            $modulePath = $this->templatesPath . "/modules/headerMenu";
+            $header1 = IO::getFileContent($modulePath . "/header_1.html");
+            $header2 = IO::getFileContent($modulePath . "/header_2.html");
+            include_once($modulePath . "/module.php");
 
-        $categoryList = $this->DB->getData("categoryList", array("number", "name", "url"));
-        $pagesList = array();
+            $categoryList = $this->DB->getData("categoryList", array("number", "name", "url"));
+            $pagesList = array();
 
-        $j = 0;
-        foreach($categoryList as $i) {
-            $pagesList[$j]["name"] = $i["name"];
-            $pagesList[$j]["url"] = $i["url"];
-            $pagesList[$j]["pages"] = $this->DB->getDataForMenuWithCategory($i["name"]);
-            $j++;
+            $j = 0;
+            foreach($categoryList as $i) {
+                $pagesList[$j]["name"] = $i["name"];
+                $pagesList[$j]["url"] = $i["url"];
+                $pagesList[$j]["pages"] = $this->DB->getDataForMenuWithCategory($i["name"]);
+                $j++;
+            }
+
+            $menuCode = getHeaderMenu(array($pagesList));
+            
+            echo $header1;
+            echo $menuCode;
+            echo $header2;
+
+            $cacheHeader = $header1 . $menuCode . $header2;
+            IO::putFileContent(path: $this->cachePath . "/system/", filename:  "header.html", content: $cacheHeader);
         }
-
-        $menuCode = getHeaderMenu(array($pagesList));
-        
-        echo $header1;
-        echo $menuCode;
-        echo $header2;
+        else {
+            echo $cacheHeader;
+        }
     }
 
     public function showFooter(): void {
