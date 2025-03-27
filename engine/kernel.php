@@ -43,9 +43,27 @@ class Kernel {
     }
 
     public function showHeader(): void {
-        $block = $this->getSystemBlock("systemHeader");
+        $modulePath = $this->templatesPath . "/modules/headerMenu";
+        $header1 = IO::getFileContent($modulePath . "/header_1.html");
+        $header2 = IO::getFileContent($modulePath . "/header_2.html");
+        include_once($modulePath . "/module.php");
 
-        echo $block;
+        $categoryList = $this->DB->getData("categoryList", array("number", "name", "url"));
+        $pagesList = array();
+
+        $j = 0;
+        foreach($categoryList as $i) {
+            $pagesList[$j]["name"] = $i["name"];
+            $pagesList[$j]["url"] = $i["url"];
+            $pagesList[$j]["pages"] = $this->DB->getDataForMenuWithCategory($i["name"]);
+            $j++;
+        }
+
+        $menuCode = getHeaderMenu(array($pagesList));
+        
+        echo $header1;
+        echo $menuCode;
+        echo $header2;
     }
 
     public function showFooter(): void {
