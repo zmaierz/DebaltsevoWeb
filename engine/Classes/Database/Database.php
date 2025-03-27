@@ -32,6 +32,46 @@ class Database {
         }
     }
 
+    public function getDataForMenuWithCategory(?string $categoryName): ?array {
+        $out = array();
+
+        try {
+            $query = "SELECT * FROM `debaltsevo-web`.`pageList` WHERE `category` = '$categoryName'";
+            $conn = $this->getConn();
+
+            try {
+                if ($result = $conn->query($query)) {
+                    $j = 0;
+                    foreach ($result as $row) {
+                        $out[$j]["name"] = $row["name"];
+                        $out[$j]["alias"] = $row["alias"];
+                        $j++;
+                    }
+                    return $out;
+                }
+                else {
+                    throw new db_connect_error;
+                }
+            }
+            catch (mysqli_sql_exception $ex) {
+                $this->errorMSG = $ex;
+                return null;
+            }
+            catch (db_connect_error $ex) {
+                $this->errorMSG = $ex;
+                return null;
+            }
+        }
+        catch (db_config_exception $ex) {
+            $this->errorMSG = $ex;
+            return null;
+        }
+        catch (db_connect_error $ex) {
+            $this->errorMSG = $ex;
+            return null;
+        }
+    }
+
     public function getData(?string $table, ?array $rows): ?array {
         $out = array();
         try {
