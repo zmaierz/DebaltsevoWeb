@@ -9,7 +9,7 @@
             else {
                 $out .= '<ul class="header-menu__sub header-menu__ul-sub1">';
                 foreach ($category["pages"] as $page) {
-                    $out .= '<a href="/' . $category["url"] . '/' . $page["alias"] . '"><li>' . $page["name"] . '</li></a>';
+                    $out .= '<a href="/' . $category["url"] . '/?page=' . $page["alias"] . '"><li>' . $page["name"] . '</li></a>';
                 }
                 $out .= '</ul></li>';
             }
