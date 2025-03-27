@@ -94,11 +94,17 @@ class Kernel {
 
         $data = $this->DB->getData("news", array("ID", "title", "short-descr"));
 
-        for ($i = count($data) - $showCount; $i < count($data); $i++) {
-            $temp = $htmlTemplate;
-            $temp = str_replace("#title#", $data[$i]["title"], $temp);
-            $temp = str_replace("#content#", $data[$i]["short-descr"], $temp);
-            $htmlOut .= $temp;
+        if ($data == null) {
+            echo "Странно! Ничего нет :(";
+            $this->showWarning("Внимание!<br>Нет никаких новостей!");
+        }
+        else {
+            for ($i = count($data) - $showCount; $i < count($data); $i++) {
+                $temp = $htmlTemplate;
+                $temp = str_replace("#title#", $data[$i]["title"], $temp);
+                $temp = str_replace("#content#", $data[$i]["short-descr"], $temp);
+                $htmlOut .= $temp;
+            }
         }
 
         $htmlOut .= $htmlStyleTemplate;
