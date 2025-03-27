@@ -19,11 +19,9 @@ class Database {
         $this->errorMSG = "";
 
         try {
-            if ($checkConnection) {
-                $conn = $this->getConn();
-                if (!$conn) {
-                    throw new db_connect_error;
-                }
+            $conn = $this->getConn();
+            if (!$conn) {
+                throw new db_connect_error;
             }
         }
         catch (db_config_exception $ex) {

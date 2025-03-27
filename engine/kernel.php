@@ -8,6 +8,8 @@ class Kernel {
     private ?array $DBConfig;
     private ?array $kernelConfig;
 
+    private ?array $fatalMessages;
+
     private ?string $modulesPath = "";
     private ?string $defaultModulesPath = "/engine/templates/modules";
     private ?string $templatesPath = "";
@@ -16,6 +18,8 @@ class Kernel {
     public function __construct() {
         $this->DBConfig = getDBConfig();
         $this->kernelConfig = getKernelConfig();
+        
+        $this->fatalMessages = getFatalMessages();
 
         if ($this->kernelConfig["modulePath"] == "") {
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
@@ -28,7 +32,13 @@ class Kernel {
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
         $dbError = $this->DB->getErrorMSG();
         if ($dbError != "") {
-            $this->showWarning($dbError, isException: true);
+            if ($this->kernelConfig["debug"] == true) {
+                $fatalMessage = $this->fatalMessages["database_no_connect_error"] . "<br><br>" . $dbError;
+            }
+            else {
+                $fatalMessage = $this->fatalMessages["database_no_connect_error"];
+            }
+            $this->showFatal($fatalMessage);
         }
     }
 
@@ -173,6 +183,11 @@ class Kernel {
         $layout["style-mobile"] = IO::getFileContent($path . "/style-mobile.css");
 
         return $layout;
+    }
+
+    private function showFatal(?string $message): void {
+        echo $message;
+        die();
     }
 }
 
