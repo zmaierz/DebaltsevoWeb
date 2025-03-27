@@ -68,17 +68,3 @@
     text-align: center;
     font-size: 15px;
 }
-
-.rigth-block__menu-content {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.rigth-block__menu-content-block h3, .rigth-block__menu-content-block h4 {
-    margin: 0;
-}
-
-.rigth-block__menu-content-block a {
-    text-decoration: none;
-}
