@@ -3,8 +3,9 @@
 function getKernelConfig(): array {
     return [
         "debug" => true, # bool
-        "modulePath" => "", # string. default: engine/templates/modules/
+        "modulePath" => "", # string. default: engine/templates/modules
         "templatePath" => "", # string. default: engine/templates
+        "cachePath" => "", # string. default: engine/cache
     ];
 }
 

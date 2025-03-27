@@ -11,9 +11,11 @@ class Kernel {
     private ?array $fatalMessages;
 
     private ?string $modulesPath = "";
-    private ?string $defaultModulesPath = "/engine/templates/modules";
     private ?string $templatesPath = "";
+    private ?string $cachePath = "";
+    private ?string $defaultModulesPath = "/engine/templates/modules";
     private ?string $defaultTemplatesPath = "/engine/templates";
+    private ?string $defaultCachePath = "/engine/cache";
     
     public function __construct() {
         $this->DBConfig = getDBConfig();
@@ -27,6 +29,9 @@ class Kernel {
 
         if ($this->kernelConfig["templatePath"] == "") {
             $this->templatesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultTemplatesPath;
+        }
+        if ($this->kernelConfig["cachePath"] == "") {
+            $this->cachePath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultCachePath;
         }
 
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
@@ -98,7 +103,6 @@ class Kernel {
         }
 
         foreach ($data as $block) {
-            // echo "<pre>"; print_r($block); echo "</pre>";
             if ($block["image"] == "") {
                 $outHtml = $blockTemplate;
                 $outHtml = str_replace("#title#", $block["title"], $outHtml);
