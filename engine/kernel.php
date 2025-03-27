@@ -49,7 +49,7 @@ class Kernel {
 
     public function showHeader(): void {
         $cacheHeader = IO::getFileContent($this->cachePath . "/system/header.html");
-        if ($cacheHeader == null) {
+        if ($cacheHeader == null || $this->kernelConfig["debug"] == true) {
             $modulePath = $this->templatesPath . "/modules/headerMenu";
             $header1 = IO::getFileContent($modulePath . "/header_1.html");
             $header2 = IO::getFileContent($modulePath . "/header_2.html");
@@ -82,7 +82,7 @@ class Kernel {
 
     public function showFooter(): void {
         $cacheFooter = IO::getFileContent($this->cachePath . "/system/footer.html");
-        if ($cacheFooter == null) {
+        if ($cacheFooter == null || $this->kernelConfig["debug"] == true) {
             $block = $this->getSystemBlock("systemFooter");
 
             echo $block;
