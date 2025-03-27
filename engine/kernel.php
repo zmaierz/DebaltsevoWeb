@@ -81,9 +81,17 @@ class Kernel {
     }
 
     public function showFooter(): void {
-        $block = $this->getSystemBlock("systemFooter");
+        $cacheFooter = IO::getFileContent($this->cachePath . "/system/footer.html");
+        if ($cacheFooter == null) {
+            $block = $this->getSystemBlock("systemFooter");
 
-        echo $block;
+            echo $block;
+
+            IO::putFileContent(path: $this->cachePath . "/system/", filename:  "footer.html", content: $block);
+        }
+        else {
+            echo $cacheFooter;
+        }
     }
 
     public function showGeneralLayout(): void {
