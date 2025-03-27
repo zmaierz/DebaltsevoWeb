@@ -112,6 +112,13 @@
 						<div class="rigth-block__menu-content-block">
 							<h3><a href="#">Контакты</a></h3>
 						</div>
+
+						<div class="rigth-block__menu-content-block">
+							<h3><a href="#">Информация</a></h3>
+							<h4><a href="#">Материалы</a></h4>
+							<h4><a href="#">Вакансии</a></h4>
+							<h4><a href="#">Контакты</a></h4>
+						</div>
 					</div>
 				</div>
 			</div>
