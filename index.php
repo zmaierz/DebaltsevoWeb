@@ -60,7 +60,7 @@
 							<h3><a href="/">Главная сайта</a></h3>
 						</div>
 						<div class="rigth-block__menu-content-block">
-							<h3><a href="#">Сведения об образовательной организации</a></h3>
+							<h3><a href="/about-us">Сведения об образовательной организации</a></h3>
 							<h4><a href="#">Структура и органы управления образовательной организацией</a></h4>
 							<h4><a href="#">Документы</a></h4>
 							<h4><a href="#">Образование</a></h4>
@@ -74,7 +74,7 @@
 						</div>
 
 						<div class="rigth-block__menu-content-block">
-							<h3><a href="#">Студентам</a></h3>
+							<h3><a href="/for-students">Студентам</a></h3>
 							<h4><a href="#">Комплексно-целевые программы</a></h4>
 							<h4><a href="#">Стипендии и иные виды материальной поддержки</a></h4>
 							<h4><a href="#">Общежитие</a></h4>
@@ -85,7 +85,7 @@
 						</div>
 
 						<div class="rigth-block__menu-content-block">
-							<h3><a href="#">Абитуриентам</a></h3>
+							<h3><a href="/for-applicants">Абитуриентам</a></h3>
 							<h4><a href="#">Документы об организации работы приемной комиссии</a></h4>
 							<h4><a href="#">Документы для поступления</a></h4>
 							<h4><a href="#">Контрольные цифры приема студентов</a></h4>
@@ -96,25 +96,25 @@
 						</div>
 
 						<div class="rigth-block__menu-content-block">
-							<h3><a href="#">Выпускникам</a></h3>
+							<h3><a href="/for-graduates">Выпускникам</a></h3>
 							<h4><a href="#">Социальные партнеры</a></h4>
 							<h4><a href="#">Советы психолога</a></h4>
 							<h4><a href="#">Центр трудоустройства выпускников</a></h4>
 						</div>
 
 						<div class="rigth-block__menu-content-block">
-							<h3><a href="#">Наша жизнь</a></h3>
+							<h3><a href="/our-life">Наша жизнь</a></h3>
 							<h4><a href="#">Новости</a></h4>
 							<h4><a href="#">Фотогалерея</a></h4>
 							<h4><a href="#">Лучшие выпускники</a></h4>
 						</div>
 
 						<div class="rigth-block__menu-content-block">
-							<h3><a href="#">Контакты</a></h3>
+							<h3><a href="/contacts">Контакты</a></h3>
 						</div>
 
 						<div class="rigth-block__menu-content-block">
-							<h3><a href="#">Информация</a></h3>
+							<h3><a href="/information">Информация</a></h3>
 							<h4><a href="#">Материалы</a></h4>
 							<h4><a href="#">Вакансии</a></h4>
 							<h4><a href="#">Контакты</a></h4>
