@@ -12,6 +12,8 @@
 }
 
 body {
+    display: flex;
+    flex-wrap: wrap;
     margin: 0;
     font-family: "Roboto", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -168,11 +170,10 @@ footer {
 }
 
 .container {
-    display: flex;
+    width: 70%;
 }
 
 .content {
-    width: 70%;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -181,7 +182,7 @@ footer {
 }
 
 .right-block {
-    width: 30%;
+    width: 27%;
     padding: 0 10px 10px 25px;
     border-top: 1px solid black;
     border-left: 1px solid black;
