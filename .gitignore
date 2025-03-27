@@ -1,2 +1,4 @@
 engine/config/DB.php
 engine/templates/media/docs/*
+engine/cache/system/*
+engine/cache/pages/*
