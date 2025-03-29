@@ -1,7 +1,8 @@
 engine/config/DB.php
-engine/templates/media/docs/*
 engine/cache/system/*
 engine/cache/pages/*
+engine/templates/media/docs/*
+engine/templates/media/files/*
 engine/templates/media/images
 !engine/templates/media/images/logo.jpg
 !engine/templates/media/images/logo_example.gif
