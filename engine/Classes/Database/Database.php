@@ -72,10 +72,10 @@ class Database {
         }
     }
 
-    public function getData(?string $table, ?array $rows): ?array {
+    public function getData(?string $table, ?array $rows, ?string $postQuery = ""): ?array {
         $out = array();
         try {
-            $query = "SELECT * FROM $table";
+            $query = "SELECT * FROM $table" . $postQuery;
             $conn = $this->getConn();
 
             try {
