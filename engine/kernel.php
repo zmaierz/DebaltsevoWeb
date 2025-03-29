@@ -13,8 +13,10 @@ class Kernel {
     private ?string $modulesPath = "";
     private ?string $templatesPath = "";
     private ?string $cachePath = "";
+    private ?string $mediaPath = "";
     private ?string $defaultModulesPath = "/engine/templates/modules";
     private ?string $defaultTemplatesPath = "/engine/templates";
+    private ?string $defaultMediaPath = "/engine/templates/media";
     private ?string $defaultCachePath = "/engine/cache";
     
     public function __construct() {
@@ -30,6 +32,11 @@ class Kernel {
         if ($this->kernelConfig["templatePath"] == "") {
             $this->templatesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultTemplatesPath;
         }
+        
+        if ($this->kernelConfig["mediaPath"] == "") {
+            $this->mediaPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultMediaPath;
+        }
+
         if ($this->kernelConfig["cachePath"] == "") {
             $this->cachePath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultCachePath;
         }
@@ -108,6 +115,130 @@ class Kernel {
         echo "<style>" . $layout["style"] . $layout["style-mobile"] . "</style>" . "<script>" . $layout["script"] . "</script>";
     }
 
+    public function getPageContent(?string $category, ?string $page): string {
+        $out = "";
+
+        # try to check fast-get from cache
+        $pageGeneralData = $this->DB->getData('pageList', array(
+            'name',
+            'alias',
+            'category',
+            'tableName',
+            'cacheName',
+        ), " WHERE alias = \"$page\";");
+        if ($pageGeneralData['cacheName'] != NULL) {
+            echo "Выводим страницу из кэша";
+        }
+        else {
+            $pageTable = $pageGeneralData[0]["tableName"] . "_Page";
+            $pageContent = $this->DB->getData($pageTable, array(
+                'type',
+                'subdata',
+                'data'
+            ));
+            if ($pageContent == NULL) {
+                $this->showWarning($this->fatalMessages["page_no_found_in_database"], true);
+            }
+
+            $useDocStyle = false;
+            for ($pageBlock = 0; $pageBlock < count($pageContent); $pageBlock++) {
+                $blockType = $pageContent[$pageBlock]["type"];
+                $blockSubData = $pageContent[$pageBlock]["subdata"];
+                $blockData = $pageContent[$pageBlock]["data"];
+
+                // showArray($pageContent[$pageBlock]);
+
+                switch ($blockType) {
+                    case "block": {
+                        echo "<br>Block type $blockType now in dev.<br>";
+                            break;
+                    }
+                    case "customCode": {
+                        echo "<br>Block type $blockType now in dev.<br>";
+                            break;
+                    }
+                    case "doc": {
+                        $fileArray = array();
+                        $j = 0;
+                        for ($i = $pageBlock; $i < count($pageContent); $i++) {
+                            if ($pageContent[$i]["type"] == "doc" || $pageContent[$i]["type"] == $file) {
+                                $fileArray[$j]["name"] = $pageContent[$i]["subdata"];
+                                if ($pageContent[$i]["type"] == "doc")
+                                    $subPath = "docs";
+                                else if ($pageContent[$i]["type"] == "file")
+                                    $subPath = "files";
+                                $fileArray[$j]["path"] = $this->mediaPath . "/" . $subPath . "/" . $pageContent[$i]["data"];
+                                $j+=1;
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        $pageBlock = $i;
+
+                        $docHtml = $this->getFileBlock($fileArray);
+
+                        $out .= $docHtml[0];
+                        if (!$useDocStyle) {
+                            $out .= $docHtml[1];
+                            $useDocStyle = true;
+                        }
+                        
+                            break;
+                    }
+                    case "file": {
+                        $fileArray = array();
+                        $j = 0;
+                        for ($i = $pageBlock; $i < count($pageContent); $i++) {
+                            if ($pageContent[$i]["type"] == "doc" || $pageContent[$i]["type"] == $file) {
+                                $fileArray[$j]["name"] = $pageContent[$i]["subdata"];
+                                if ($pageContent[$i]["type"] == "doc")
+                                    $subPath = "docs";
+                                else if ($pageContent[$i]["type"] == "file")
+                                    $subPath = "files";
+                                $fileArray[$j]["path"] = $this->mediaPath . "/" . $subPath . "/" . $pageContent[$i]["data"];
+                                $j+=1;
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        $pageBlock = $i;
+
+                        $docHtml = $this->getFileBlock($fileArray);
+
+                        $out .= $docHtml[0];
+                        if (!$useDocStyle) {
+                            $out .= $docHtml[1];
+                            $useDocStyle = true;
+                        }
+                        
+                            break;
+                    }
+                    case "link": {
+                        echo "<br>Block type $blockType now in dev.<br>";
+                            break;
+                    }
+                    case "photo": {
+                        echo "<br>Block type $blockType now in dev.<br>";
+                            break;
+                    }
+                    default: {
+                        $this->showWarning($this->fatalMessages["page_block_not_allowed"]);
+                        echo "Block not found! Name: $blockType";
+                        echo "Array: <br><br>";
+                        showArray($pageContent[$pageBlock]);
+                        echo "<br><br> Array end. <br>";
+                            break;
+                    }
+                }
+            }
+            echo $out;
+        }
+
+        return $out;
+    }
+
     public function showMainPageBlocks() {
         $data = $this->DB->getData("mainPageContent", array("ID", "title", "image", "description"));
         $blockTemplate = $this->getBlock("mainPageBlock", getStyle: false);
@@ -177,6 +308,22 @@ class Kernel {
         $outHtml = $html . "<style>" . $css . $cssMobile . "</style>" . "<script>" . $script . "</script>";
 
         echo $outHtml;
+    }
+
+    private function getFileBlock(?array $files): array {
+        $out = array("", "");
+        
+        $content_1 = IO::getFileContent($this->modulesPath . "/pageInfoFileBlock/content_1.html");
+        $content_2 = IO::getFileContent($this->modulesPath . "/pageInfoFileBlock/content_2.html");
+        $style = IO::getFileContent($this->modulesPath . "/pageInfoFileBlock/style.css");
+        $styleMobile = IO::getFileContent($this->modulesPath . "/pageInfoFileBlock/style-mobile.css");
+        $script = IO::getFileContent($this->modulesPath . "/pageInfoFileBlock/script.js");
+        include_once($this->modulesPath . "/pageInfoFileBlock/module.php");
+
+        $out[0] = $content_1 . getPageInfoFileBlock_HTML($files) . $content_2;
+        $out[1] = "<style>$style $styleMobile </style><script>$script</script>";
+
+        return $out;
     }
 
     private function getSystemBlock(?string $name): string {
