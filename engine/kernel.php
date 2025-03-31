@@ -141,6 +141,7 @@ class Kernel {
             }
 
             $useDocStyle = false;
+            $useBlockStyle = false;
             for ($pageBlock = 0; $pageBlock < count($pageContent); $pageBlock++) {
                 $blockType = $pageContent[$pageBlock]["type"];
                 $blockSubData = $pageContent[$pageBlock]["subdata"];
@@ -150,7 +151,15 @@ class Kernel {
 
                 switch ($blockType) {
                     case "block": {
-                        echo "<br>Block type $blockType now in dev.<br>";
+                        $html = $this->getBlock("pageInfoTextBlock", getStyle: false);
+                        $css = $this->getBlock("pageInfoTextBlock", getOnlyStyle: true);
+                        $html = str_replace("#!#", $pageContent[$pageBlock]["subdata"], $html);
+                        $html = str_replace("#~#", $pageContent[$pageBlock]["data"], $html);
+                        if (!$useBlockStyle) {
+                            $html .= $css;
+                            $useBlockStyle = true;
+                        }
+                        $out .= $html;
                             break;
                     }
                     case "customCode": {
