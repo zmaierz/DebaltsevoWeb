@@ -147,8 +147,6 @@ class Kernel {
                 $blockSubData = $pageContent[$pageBlock]["subdata"];
                 $blockData = $pageContent[$pageBlock]["data"];
 
-                // showArray($pageContent[$pageBlock]);
-
                 switch ($blockType) {
                     case "block": {
                         $html = $this->getBlock("pageInfoTextBlock", getStyle: false);
@@ -163,7 +161,7 @@ class Kernel {
                             break;
                     }
                     case "customCode": {
-                        echo "<br>Block type $blockType now in dev.<br>";
+                        $out .= $pageContent[$pageBlock]["data"];
                             break;
                     }
                     case "doc": {
@@ -221,7 +219,6 @@ class Kernel {
                             $out .= $docHtml[1];
                             $useDocStyle = true;
                         }
-                        
                             break;
                     }
                     case "link": {
