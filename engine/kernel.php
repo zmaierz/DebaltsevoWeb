@@ -34,7 +34,7 @@ class Kernel {
         }
         
         if ($this->kernelConfig["mediaPath"] == "") {
-            $this->mediaPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultMediaPath;
+            $this->mediaPath = $this->defaultMediaPath;
         }
 
         if ($this->kernelConfig["cachePath"] == "") {
@@ -142,6 +142,7 @@ class Kernel {
 
             $useDocStyle = false;
             $useBlockStyle = false;
+            $usePhotoBlockStyle = false;
             for ($pageBlock = 0; $pageBlock < count($pageContent); $pageBlock++) {
                 $blockType = $pageContent[$pageBlock]["type"];
                 $blockSubData = $pageContent[$pageBlock]["subdata"];
@@ -168,7 +169,7 @@ class Kernel {
                         $fileArray = array();
                         $j = 0;
                         for ($i = $pageBlock; $i < count($pageContent); $i++) {
-                            if ($pageContent[$i]["type"] == "doc" || $pageContent[$i]["type"] == $file) {
+                            if ($pageContent[$i]["type"] == "doc" || $pageContent[$i]["type"] == "file") { # CHECK MY WORK. WHY "$file"
                                 $fileArray[$j]["name"] = $pageContent[$i]["subdata"];
                                 if ($pageContent[$i]["type"] == "doc")
                                     $subPath = "docs";
@@ -222,11 +223,52 @@ class Kernel {
                             break;
                     }
                     case "link": {
-                        echo "<br>Block type $blockType now in dev.<br>";
+                        $linkArray = array();
+
+                        $j = 0;
+                        for ($i = $pageBlock; $i < count($pageContent); $i++) {
+                            if ($pageContent[$i]["type"] == "link") {
+                                $linkArray[$j] = $pageContent[$i]["data"];
+                                $j++;
+                            }
+                            else {
+                                $pageBlock = $i - 1;
+                                break;
+                            }
+                        }
+
+                        $content = "";
+
+                        foreach ($linkArray as $link) {
+                            $content .= "<a href=\"$link\">$link</a><br>";
+                        }
+
+                        $html = $this->getBlock("pageInfoTextBlock", getStyle: false);
+                        $css = $this->getBlock("pageInfoTextBlock", getOnlyStyle: true);
+                        
+                        $html = str_replace("#!#", "Файлы", $html);
+                        $html = str_replace("#~#", $content, $html);
+
+                        $out .= $html;
+                        if (!$useBlockStyle) {
+                            $out .= $css;
+                            $useBlockStyle = true;
+                        }
                             break;
                     }
                     case "photo": {
-                        echo "<br>Block type $blockType now in dev.<br>";
+                        $html = $this->getBlock("pageInfoPhotoBlock", getStyle: false);
+                        $css = $this->getBlock("pageInfoPhotoBlock", getOnlyStyle: true);
+
+                        $content = "<img src=\"$this->mediaPath\images\\$blockData\" alt=\"\">";
+                        $html = str_replace("#!#", $blockSubData, $html);
+                        $html = str_replace("#~#", $content, $html);
+
+                        $out .= $html;
+                        if (!$usePhotoBlockStyle) {
+                            $out .= $css;
+                            $usePhotoBlockStyle = true;
+                        }
                             break;
                     }
                     default: {
