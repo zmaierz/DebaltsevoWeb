@@ -2,9 +2,11 @@
 
     function getHeaderMenu(?array $menuData): string {
         $out = "";
-        foreach ($menuData[0] as $category) {
+        foreach ($menuData as $category) {
             $out .= '<li class="header-menu__li-sub1"><a href="/' . $category["url"] . '">' . $category["name"] . '</a>';
-            if (count($category["pages"]) == 0)
+            if ($category["pages"] == NULL)
+                $out .= '</li>';
+            else if (count($category["pages"]) == 0)
                 $out .= '</li>';
             else {
                 $out .= '<ul class="header-menu__sub header-menu__ul-sub1">';
