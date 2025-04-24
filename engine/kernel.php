@@ -246,7 +246,7 @@ class Kernel {
                         $html = $this->getBlock("pageInfoTextBlock", getStyle: false);
                         $css = $this->getBlock("pageInfoTextBlock", getOnlyStyle: true);
                         
-                        $html = str_replace("#!#", "Файлы", $html);
+                        $html = str_replace("#!#", "Ссылки", $html);
                         $html = str_replace("#~#", $content, $html);
 
                         $out .= $html;
