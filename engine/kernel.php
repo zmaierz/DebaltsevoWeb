@@ -60,7 +60,9 @@ class Kernel {
 
     public function showHeader(): void {
         $cacheHeader = IO::getFileContent($this->cachePath . "/system/header.html");
-        if ($cacheHeader == null || $this->kernelConfig["debug"] == true) {
+        if ($cacheHeader == null || $this->kernelConfig["useCache"] == false) {
+            if ($this->kernelConfig["debug"])
+                echo "Сборка шапки";
             $modulePath = $this->templatesPath . "/modules/headerMenu";
             $header1 = IO::getFileContent($modulePath . "/header_1.html");
             $header2 = IO::getFileContent($modulePath . "/header_2.html");
@@ -87,21 +89,28 @@ class Kernel {
             IO::putFileContent(path: $this->cachePath . "/system/", filename:  "header.html", content: $cacheHeader);
         }
         else {
+            if ($this->kernelConfig["debug"])
+                echo "Получение шапки из кэша";
             echo $cacheHeader;
         }
     }
 
     public function showFooter(): void {
         $cacheFooter = IO::getFileContent($this->cachePath . "/system/footer.html");
-        if ($cacheFooter == null || $this->kernelConfig["debug"] == true) {
+        if ($cacheFooter == null || $this->kernelConfig["useCache"] == false) {
             $block = $this->getSystemBlock("systemFooter");
 
             echo $block;
 
             IO::putFileContent(path: $this->cachePath . "/system/", filename:  "footer.html", content: $block);
+            
+            if ($this->kernelConfig["debug"])
+                echo "Сборка подвала";
         }
         else {
             echo $cacheFooter;
+            if ($this->kernelConfig["debug"])
+                echo "Получение подвала из кэша";
         }
     }
 
@@ -149,7 +158,7 @@ class Kernel {
             'cacheName',
         ), " WHERE alias = \"$page\";");
         $cacheName = $pageGeneralData[0]['cacheName'];
-        if ($cacheName != NULL) {
+        if ($cacheName != NULL && $this->kernelConfig["useCache"]) {
             if ($this->kernelConfig["debug"])
                 echo "Использование кэша";
             $cachePath = $this->cachePath . "/pages//" . $cacheName;
@@ -310,22 +319,22 @@ class Kernel {
                 }
             }
             
-            # Кэширование страницы
-            $cacheFileName = "";
-            $cacheFileNameCreated = false;
-            for($i = 0; $i < 10; $i++) { # Ограничение на 10 попыток генерации названия кэша
-                $cacheFileName = strval(mt_rand()) . ".html";
-                if (!file_exists($this->cachePath . "/pages/$cacheFileName")) {
-                    $cacheFileNameCreated = true;
-                    break;
+            if ($cacheName == NULL) { # Кэширование страницы
+                $cacheFileName = "";
+                $cacheFileNameCreated = false;
+                for($i = 0; $i < 10; $i++) { # Ограничение на 10 попыток генерации названия кэша
+                    $cacheFileName = strval(mt_rand()) . ".html";
+                    if (!file_exists($this->cachePath . "/pages/$cacheFileName")) {
+                        $cacheFileNameCreated = true;
+                        break;
+                    }
+                }
+
+                if ($cacheFileNameCreated) {
+                    IO::putFileContent($this->cachePath . "/pages//", $cacheFileName, $out);
+                    $this->DB->addCacheToPage($page, $cacheFileName);
                 }
             }
-
-            if ($cacheFileNameCreated) {
-                IO::putFileContent($this->cachePath . "/pages//", $cacheFileName, $out);
-                $this->DB->addCacheToPage($page, $cacheFileName);
-            }
-
         }
 
         return $out;
