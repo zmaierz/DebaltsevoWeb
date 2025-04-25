@@ -32,7 +32,7 @@ class Database {
         }
     }
 
-    public function createNewImmunityIncident(?string $type, ?string $name, ?string $data, ?string $description = "", ?string $subdata = ""): bool {
+    public function createNewImmunityIncident(?string $type, ?string $name, ?string $data, ?string $description = "", ?string $subdata = ""): void {
         $conn = $this->getConn();
         $actualDate = date("Y-m-d H:i:s");
 
