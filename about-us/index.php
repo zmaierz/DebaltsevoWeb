@@ -21,7 +21,7 @@
                 <?php
                     $page = $_GET["page"];
 
-                    $app->getPageContent(basename(__DIR__), $page);
+                    echo $app->getPageContent(basename(__DIR__), $page);
                 ?>
             </div>
         </div>
