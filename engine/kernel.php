@@ -73,7 +73,7 @@ class Kernel {
                 $j++;
             }
 
-            $menuCode = getHeaderMenu(array($pagesList));
+            $menuCode = getHeaderMenu($pagesList);
             
             echo $header1;
             echo $menuCode;
