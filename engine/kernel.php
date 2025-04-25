@@ -4,6 +4,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/engine/modules/include.php";
 
 class Kernel {
     private ?Database $DB;
+    private ?Immunity $immunity;
     
     private ?array $DBConfig;
     private ?array $kernelConfig;
@@ -41,6 +42,7 @@ class Kernel {
             $this->cachePath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultCachePath;
         }
 
+        $this->immunity = new Immunity($this->kernelConfig["deniedSymbols"]);
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
         $dbError = $this->DB->getErrorMSG();
         if ($dbError != "") {

@@ -7,6 +7,7 @@ include ($_SERVER["DOCUMENT_ROOT"] . "/engine/config/kernelConfig.php");
 # Connect Classes
 include ($_SERVER["DOCUMENT_ROOT"] . "/engine/Classes/Database/Database.php");
 include ($_SERVER["DOCUMENT_ROOT"] . "/engine/Classes/IO/IO.php");
+include ($_SERVER["DOCUMENT_ROOT"] . "/engine/Classes/Immunity/Immunity.php");
 
 # Connect Exceptions
 include ($_SERVER["DOCUMENT_ROOT"] . "/engine/Classes/Exceptions/db_config_exception.php");
