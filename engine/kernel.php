@@ -120,9 +120,15 @@ class Kernel {
     public function getPageContent(?string $category, ?string $page): string {
         $out = "";
 
-        if (!$this->immunity->validateString($page)) {
-            echo "Ошибка при проверке! Обнаружена SQL инъекция!";
-            die();
+        try {
+            if (!$this->immunity->validateString($page)) {
+                throw new immunity_warning_sql_injection($this->fatalMessages["immunity_warning_sql_injection"]);
+            }
+        }
+        catch (immunity_warning_sql_injection $ex) {
+            $ipAddress = $_SERVER["REMOTE_ADDR"];
+            $httpClient = $_SERVER["HTTP_USER_AGENT"];
+            $this->showFatal($ex->getMessage());
         }
 
         # try to check fast-get from cache
