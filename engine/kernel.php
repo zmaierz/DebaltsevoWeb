@@ -10,6 +10,7 @@ class Kernel {
     private ?array $kernelConfig;
 
     private ?array $fatalMessages;
+    private ?array $immunityMessages;
 
     private ?string $modulesPath = "";
     private ?string $templatesPath = "";
@@ -25,6 +26,7 @@ class Kernel {
         $this->kernelConfig = getKernelConfig();
         
         $this->fatalMessages = getFatalMessages();
+        $this->immunityMessages = getImmunityMessages();
 
         if ($this->kernelConfig["modulePath"] == "") {
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
@@ -128,6 +130,13 @@ class Kernel {
         catch (immunity_warning_sql_injection $ex) {
             $ipAddress = $_SERVER["REMOTE_ADDR"];
             $httpClient = $_SERVER["HTTP_USER_AGENT"];
+            $this->DB->createNewImmunityIncident(
+                type: "sql-injection",
+                name: $this->immunityMessages["sql-injection-from-url-name"],
+                description: str_replace("#1#", $page, $this->immunityMessages["sql-injection-from-url-description"]),
+                data: $ipAddress,
+                subdata: $httpClient
+            );
             $this->showFatal($ex->getMessage());
         }
 

@@ -9,4 +9,11 @@ function getFatalMessages(): array {
     );
 }
 
+function getImmunityMessages(): array {
+    return array(
+        "sql-injection-from-url-name" => "Попытка SQL-инъекции через адресную строку браузера",
+        "sql-injection-from-url-description" => "Была попытка SQL-инъекции через адресную строку браузера.\nСтрока: #1#",
+    );
+}
+
 ?>
