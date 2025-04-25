@@ -44,6 +44,9 @@ class Database {
         catch (db_connect_error $ex) {
 
         }
+        catch (mysqli_sql_exception $ex) {
+
+        }
     }
 
     public function getDataForMenuWithCategory(?string $categoryName): ?array {
