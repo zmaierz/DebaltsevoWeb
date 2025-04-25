@@ -28,21 +28,29 @@ class Kernel {
         $this->fatalMessages = getFatalMessages();
         $this->immunityMessages = getImmunityMessages();
 
-        if ($this->kernelConfig["modulePath"] == "") {
+        if ($this->kernelConfig["modulePath"] == "")
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
-        }
+        else
+            $this->modulesPath = $this->kernelConfig["modulePath"];
 
-        if ($this->kernelConfig["templatePath"] == "") {
+
+        if ($this->kernelConfig["templatePath"] == "")
             $this->templatesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultTemplatesPath;
-        }
-        
-        if ($this->kernelConfig["mediaPath"] == "") {
-            $this->mediaPath = $this->defaultMediaPath;
-        }
+        else
+            $this->templatesPath = $this->kernelConfig["templatePath"];
 
-        if ($this->kernelConfig["cachePath"] == "") {
+        
+        if ($this->kernelConfig["mediaPath"] == "")
+            $this->mediaPath = $this->defaultMediaPath;
+        else
+            $this->mediaPath = $this->kernelConfig["mediaPath"];
+
+
+        if ($this->kernelConfig["cachePath"] == "")
             $this->cachePath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultCachePath;
-        }
+        else
+            $this->cachePath = $this->kernelConfig["cachePath"];
+
 
         $this->immunity = new Immunity($this->kernelConfig["deniedSymbols"]);
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
