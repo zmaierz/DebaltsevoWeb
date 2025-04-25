@@ -32,6 +32,20 @@ class Database {
         }
     }
 
+    public function createNewImmunityIncident(?string $type, ?string $name, ?string $data, ?string $description = "", ?string $subdata = ""): bool {
+        $conn = $this->getConn();
+        $actualDate = date("Y-m-d H:i:s");
+
+        $query = "INSERT INTO `immunityIncidents` (`ID`, `type`, `name`, `description`, `subdata`, `data`, `time`) VALUES (NULL, '$type', '$name', '$description', '$subdata', '$data', '$actualDate')";
+
+        try {
+            $conn->query($query);
+        }
+        catch (db_connect_error $ex) {
+
+        }
+    }
+
     public function getDataForMenuWithCategory(?string $categoryName): ?array {
         $out = array();
 
