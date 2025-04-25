@@ -11,6 +11,7 @@ class Kernel {
 
     private ?array $fatalMessages;
     private ?array $immunityMessages;
+    private ?array $warningMessages;
 
     private ?string $modulesPath = "";
     private ?string $templatesPath = "";
@@ -25,8 +26,27 @@ class Kernel {
         $this->DBConfig = getDBConfig();
         $this->kernelConfig = getKernelConfig();
         
+        $this->immunity = new Immunity();
+        $systemConfigsCheck = $this->immunity->validateConfigs(
+            array(
+                "DBConfig" => $this->DBConfig,
+                "kernelConfig" => $this->kernelConfig,
+            )
+        );
+        $this->immunity->setDeniedSymbols($this->kernelConfig["deniedSymbols"]);
+        
         $this->fatalMessages = getFatalMessages();
         $this->immunityMessages = getImmunityMessages();
+        $this->warningMessages = getWarningMessages();
+
+        if ($systemConfigsCheck == 1) {
+            $this->showWarning($this->warningMessages["kernel-config-warning"]);
+        }
+        else if ($systemConfigsCheck == 2) {
+            $this->showWarning($this->warningMessages["db-config-warning"], true);
+        }
+
+        echo "Проверка конфига: " . $systemConfigsCheck;
 
         if ($this->kernelConfig["modulePath"] == "")
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
