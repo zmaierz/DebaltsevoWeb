@@ -148,10 +148,16 @@ class Kernel {
             'tableName',
             'cacheName',
         ), " WHERE alias = \"$page\";");
-        if ($pageGeneralData['cacheName'] != NULL) {
-            echo "Выводим страницу из кэша";
+        $cacheName = $pageGeneralData[0]['cacheName'];
+        if ($cacheName != NULL) {
+            if ($this->kernelConfig["debug"])
+                echo "Использование кэша";
+            $cachePath = $this->cachePath . "/pages//" . $cacheName;
+            $out = IO::getFileContent($cachePath);
         }
         else {
+            if ($this->kernelConfig["debug"])
+                echo "Сборка страницы";
             $pageTable = $pageGeneralData[0]["tableName"] . "_Page";
             $pageContent = $this->DB->getData($pageTable, array(
                 'type',
@@ -303,7 +309,23 @@ class Kernel {
                     }
                 }
             }
-            echo $out;
+            
+            # Кэширование страницы
+            $cacheFileName = "";
+            $cacheFileNameCreated = false;
+            for($i = 0; $i < 10; $i++) { # Ограничение на 10 попыток генерации названия кэша
+                $cacheFileName = strval(mt_rand()) . ".html";
+                if (!file_exists($this->cachePath . "/pages/$cacheFileName")) {
+                    $cacheFileNameCreated = true;
+                    break;
+                }
+            }
+
+            if ($cacheFileNameCreated) {
+                IO::putFileContent($this->cachePath . "/pages//", $cacheFileName, $out);
+                $this->DB->addCacheToPage($page, $cacheFileName);
+            }
+
         }
 
         return $out;
