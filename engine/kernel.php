@@ -89,12 +89,12 @@ class Kernel {
 
             $menuCode = getHeaderMenu(array($pagesList));
             
-            echo $header1;
-            echo $menuCode;
-            echo $header2;
-
             $cacheHeader = $header1 . $menuCode . $header2;
-            IO::putFileContent(path: $this->cachePath . "/system/", filename:  "header.html", content: $cacheHeader);
+
+            echo $cacheHeader;
+
+            if (!file_exists($this->cachePath . "/system/header.html"))
+                IO::putFileContent(path: $this->cachePath . "/system/", filename:  "header.html", content: $cacheHeader);
         }
         else {
             if ($this->kernelConfig["debug"])
@@ -106,12 +106,31 @@ class Kernel {
     public function showFooter(): void {
         $cacheFooter = IO::getFileContent($this->cachePath . "/system/footer.html");
         if ($cacheFooter == null || $this->kernelConfig["useCache"] == false) {
-            $block = $this->getSystemBlock("systemFooter");
+            $modulePath = $this->templatesPath . "/modules/footerGenerate";
+            $footer1 = IO::getFileContent($modulePath . "/footer_1.html");
+            $footer2 = IO::getFileContent($modulePath . "/footer_2.html");
+            include_once($modulePath . "/module.php");
 
-            echo $block;
+            $categoryList = $this->DB->getData("categoryList", array("number", "name", "url"));
+            $pagesList = array();
 
-            IO::putFileContent(path: $this->cachePath . "/system/", filename:  "footer.html", content: $block);
-            
+            $j = 0;
+            foreach($categoryList as $i) {
+                $pagesList[$j]["name"] = $i["name"];
+                $pagesList[$j]["url"] = $i["url"];
+                $pagesList[$j]["pages"] = $this->DB->getDataForMenuWithCategory($i["name"]);
+                $j++;
+            }
+
+            $menuCode = generateFooterCode(array($pagesList));
+
+            $cacheFooter = $footer1 . $menuCode . $footer2;
+
+            echo $cacheFooter;
+
+            if (!file_exists($this->cachePath . "/system/footer.html"))
+                IO::putFileContent(path: $this->cachePath . "/system/", filename:  "footer.html", content: $cacheFooter);
+
             if ($this->kernelConfig["debug"])
                 echo "Сборка подвала";
         }
