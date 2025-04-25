@@ -11,6 +11,15 @@ class Immunity {
         else
             $this->deniedSymbols = $deniedSymbols;
     }
+    public function validateString(?string $temp): bool {
+        $temp = trim($temp);
+        foreach ($this->deniedSymbols as $i) {
+            if (str_contains($temp, $i)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 ?>

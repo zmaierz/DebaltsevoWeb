@@ -120,6 +120,11 @@ class Kernel {
     public function getPageContent(?string $category, ?string $page): string {
         $out = "";
 
+        if (!$this->immunity->validateString($page)) {
+            echo "Ошибка при проверке! Обнаружена SQL инъекция!";
+            die();
+        }
+
         # try to check fast-get from cache
         $pageGeneralData = $this->DB->getData('pageList', array(
             'name',
