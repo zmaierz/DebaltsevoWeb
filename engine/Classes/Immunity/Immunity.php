@@ -28,6 +28,13 @@ class Immunity {
         "port" => "integer"
     );
 
+    public function __construct(?array $deniedSymbols) {
+        if ($deniedSymbols == null)
+            $this->deniedSymbols = $this->defaultDeniedSymbols;
+        else
+            $this->deniedSymbols = $deniedSymbols;
+    }
+
     public function validateString(?string $temp): bool {
         $temp = trim($temp);
         foreach ($this->deniedSymbols as $i) {
@@ -55,12 +62,6 @@ class Immunity {
         }
 
         return $status;
-    }
-    public function setDeniedSymbols(?array $deniedSymbols): void {
-        if ($deniedSymbols == null)
-            $this->deniedSymbols = $this->defaultDeniedSymbols;
-        else
-            $this->deniedSymbols = $deniedSymbols;
     }
 }
 
