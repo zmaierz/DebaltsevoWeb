@@ -68,7 +68,7 @@ class Kernel {
         else if ($systemConfigsCheck == 2) {
             $this->showWarning($this->warningMessages["db-config-warning"], true);
         }
-        
+
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
         $dbError = $this->DB->getErrorMSG();
         if ($dbError != "") {
@@ -437,7 +437,6 @@ class Kernel {
     }
 
     public function showWarning(?string $exceptionMessage, ?bool $isException = false): void {
-        echo "Попал в вывод warning<br>";
         if ($isException)
             $path = $this->modulesPath . "/showException//";
         else
@@ -447,7 +446,6 @@ class Kernel {
         $css = IO::getFileContent($path . "style.css");
         $cssMobile = IO::getFileContent($path . "style-mobile.css");
         $script = IO::getFileContent($path . "script.css");
-        echo "Путь: $path";
 
         $html = str_replace("#~#", $exceptionMessage, $html);
 
