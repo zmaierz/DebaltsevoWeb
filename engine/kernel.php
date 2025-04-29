@@ -25,27 +25,10 @@ class Kernel {
     public function __construct() {
         $this->DBConfig = getDBConfig();
         $this->kernelConfig = getKernelConfig();
-        
-        $this->immunity = new Immunity($this->kernelConfig["deniedSymbols"]);
-        $systemConfigsCheck = $this->immunity->validateConfigs(
-            array(
-                "DBConfig" => $this->DBConfig,
-                "kernelConfig" => $this->kernelConfig,
-            )
-        );
-        
+                
         $this->fatalMessages = getFatalMessages();
         $this->immunityMessages = getImmunityMessages();
         $this->warningMessages = getWarningMessages();
-
-        if ($systemConfigsCheck == 1) {
-            $this->showWarning($this->warningMessages["kernel-config-warning"], isException: false);
-        }
-        else if ($systemConfigsCheck == 2) {
-            $this->showWarning($this->warningMessages["db-config-warning"], true);
-        }
-
-        // echo "Проверка конфига: " . $systemConfigsCheck;
 
         if ($this->kernelConfig["modulePath"] == "")
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
@@ -70,8 +53,22 @@ class Kernel {
         else
             $this->cachePath = $this->kernelConfig["cachePath"];
 
-
         $this->immunity = new Immunity($this->kernelConfig["deniedSymbols"]);
+
+        $systemConfigsCheck = $this->immunity->validateConfigs(
+            array(
+                "DBConfig" => $this->DBConfig,
+                "kernelConfig" => $this->kernelConfig,
+            )
+        );
+
+        if ($systemConfigsCheck == 1) {
+            $this->showWarning($this->warningMessages["kernel-config-warning"], isException: false);
+        }
+        else if ($systemConfigsCheck == 2) {
+            $this->showWarning($this->warningMessages["db-config-warning"], true);
+        }
+        
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
         $dbError = $this->DB->getErrorMSG();
         if ($dbError != "") {
@@ -440,6 +437,7 @@ class Kernel {
     }
 
     public function showWarning(?string $exceptionMessage, ?bool $isException = false): void {
+        echo "Попал в вывод warning<br>";
         if ($isException)
             $path = $this->modulesPath . "/showException//";
         else
@@ -449,6 +447,7 @@ class Kernel {
         $css = IO::getFileContent($path . "style.css");
         $cssMobile = IO::getFileContent($path . "style-mobile.css");
         $script = IO::getFileContent($path . "script.css");
+        echo "Путь: $path";
 
         $html = str_replace("#~#", $exceptionMessage, $html);
 
