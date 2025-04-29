@@ -2,7 +2,7 @@
 
 class Immunity {
     private ?array $defaultDeniedSymbols = array(
-        '$', '%', ';', '\'', '"', '`', '#', '@', '&', '~'
+        '$', '%', ';', '\'', '"', '`', '#', '@', '&', '~', '<', '>',
     );
     private ?array $deniedSymbols;
 
