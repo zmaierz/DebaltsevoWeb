@@ -21,6 +21,9 @@ class Kernel {
     private ?string $defaultTemplatesPath = "/engine/templates";
     private ?string $defaultMediaPath = "/engine/templates/media";
     private ?string $defaultCachePath = "/engine/cache";
+
+    private ?string $kernelInnerWarning;
+    private ?string $kernelInnerFatal;
     
     public function __construct() {
         $this->DBConfig = getDBConfig();
@@ -29,6 +32,9 @@ class Kernel {
         $this->fatalMessages = getFatalMessages();
         $this->immunityMessages = getImmunityMessages();
         $this->warningMessages = getWarningMessages();
+
+        $this->kernelInnerWarning = $this->warningMessages["kernel-inner-warning"];
+        $this->kernelInnerFatal = $this->warningMessages["kernel-inner-fatal"];
 
         if ($this->kernelConfig["modulePath"] == "")
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
@@ -63,10 +69,20 @@ class Kernel {
         );
 
         if ($systemConfigsCheck == 1) {
-            $this->showWarning($this->warningMessages["kernel-config-warning"], isException: false);
+            $warningMessage = "";
+            if ($this->kernelConfig["debug"])
+                $warningMessage = $this->warningMessages["kernel-config-warning"];
+            else
+                $warningMessage = $this->kernelInnerWarning;
+            $this->showWarning($warningMessage, isException: false);
         }
         else if ($systemConfigsCheck == 2) {
-            $this->showWarning($this->warningMessages["db-config-warning"], true);
+            $fatalMessage = "";
+            if ($this->kernelConfig["debug"])
+                $fatalMessage = $this->warningMessages["db-config-warning"];
+            else
+                $fatalMessage = $this->kernelInnerFatal;
+            $this->showWarning($fatalMessage, true);
         }
 
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
@@ -217,7 +233,12 @@ class Kernel {
                 'data'
             ));
             if ($pageContent == NULL) {
-                $this->showWarning($this->fatalMessages["page_no_found_in_database"], true);
+                $errorMessage = "";
+                if ($this->kernelConfig["debug"])
+                    $errorMessage = $this->fatalMessages["page_no_found_in_database"];
+                else
+                    $errorMessage = $this->kernelInnerWarning;
+                $this->showWarning($errorMessage);
             }
 
             $useDocStyle = false;
@@ -352,11 +373,12 @@ class Kernel {
                             break;
                     }
                     default: {
-                        $this->showWarning($this->fatalMessages["page_block_not_allowed"]);
-                        echo "Block not found! Name: $blockType";
-                        echo "Array: <br><br>";
-                        showArray($pageContent[$pageBlock]);
-                        echo "<br><br> Array end. <br>";
+                        $errorMessage = "";
+                        if ($this->kernelConfig["debug"])
+                            $errorMessage = $this->fatalMessages["page_block_not_allowed"];
+                        else
+                            $errorMessage = $this->kernelInnerWarning;
+                        $this->showWarning($errorMessage);
                             break;
                     }
                 }
@@ -391,7 +413,12 @@ class Kernel {
         
         $dbError = $this->DB->getErrorMSG();
         if ($dbError != "") {
-            $this->showWarning($dbError, isException: true);
+            $errorMessage = "";
+            if ($this->kernelConfig["debug"])
+                $errorMessage = $dbError;
+            else
+                $errorMessage = $this->kernelInnerWarning;
+            $this->showWarning($errorMessage, isException: true);
         }
 
         foreach ($data as $block) {
