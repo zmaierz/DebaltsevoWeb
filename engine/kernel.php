@@ -4,11 +4,14 @@ include $_SERVER["DOCUMENT_ROOT"] . "/engine/modules/include.php";
 
 class Kernel {
     private ?Database $DB;
+    private ?Immunity $immunity;
     
     private ?array $DBConfig;
     private ?array $kernelConfig;
 
     private ?array $fatalMessages;
+    private ?array $immunityMessages;
+    private ?array $warningMessages;
 
     private ?string $modulesPath = "";
     private ?string $templatesPath = "";
@@ -18,27 +21,68 @@ class Kernel {
     private ?string $defaultTemplatesPath = "/engine/templates";
     private ?string $defaultMediaPath = "/engine/templates/media";
     private ?string $defaultCachePath = "/engine/cache";
+
+    private ?string $kernelInnerWarning;
+    private ?string $kernelInnerFatal;
     
     public function __construct() {
         $this->DBConfig = getDBConfig();
         $this->kernelConfig = getKernelConfig();
-        
+                
         $this->fatalMessages = getFatalMessages();
+        $this->immunityMessages = getImmunityMessages();
+        $this->warningMessages = getWarningMessages();
 
-        if ($this->kernelConfig["modulePath"] == "") {
+        $this->kernelInnerWarning = $this->warningMessages["kernel-inner-warning"];
+        $this->kernelInnerFatal = $this->warningMessages["kernel-inner-fatal"];
+
+        if ($this->kernelConfig["modulePath"] == "")
             $this->modulesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultModulesPath;
-        }
+        else
+            $this->modulesPath = $this->kernelConfig["modulePath"];
 
-        if ($this->kernelConfig["templatePath"] == "") {
+
+        if ($this->kernelConfig["templatePath"] == "")
             $this->templatesPath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultTemplatesPath;
-        }
-        
-        if ($this->kernelConfig["mediaPath"] == "") {
-            $this->mediaPath = $this->defaultMediaPath;
-        }
+        else
+            $this->templatesPath = $this->kernelConfig["templatePath"];
 
-        if ($this->kernelConfig["cachePath"] == "") {
+        
+        if ($this->kernelConfig["mediaPath"] == "")
+            $this->mediaPath = $this->defaultMediaPath;
+        else
+            $this->mediaPath = $this->kernelConfig["mediaPath"];
+
+
+        if ($this->kernelConfig["cachePath"] == "")
             $this->cachePath = $_SERVER["DOCUMENT_ROOT"] . $this->defaultCachePath;
+        else
+            $this->cachePath = $this->kernelConfig["cachePath"];
+
+        $this->immunity = new Immunity($this->kernelConfig["deniedSymbols"]);
+
+        $systemConfigsCheck = $this->immunity->validateConfigs(
+            array(
+                "DBConfig" => $this->DBConfig,
+                "kernelConfig" => $this->kernelConfig,
+            )
+        );
+
+        if ($systemConfigsCheck == 1) {
+            $warningMessage = "";
+            if ($this->kernelConfig["debug"])
+                $warningMessage = $this->warningMessages["kernel-config-warning"];
+            else
+                $warningMessage = $this->kernelInnerWarning;
+            $this->showWarning($warningMessage, isException: false);
+        }
+        else if ($systemConfigsCheck == 2) {
+            $fatalMessage = "";
+            if ($this->kernelConfig["debug"])
+                $fatalMessage = $this->warningMessages["db-config-warning"];
+            else
+                $fatalMessage = $this->kernelInnerFatal;
+            $this->showWarning($fatalMessage, true);
         }
 
         $this->DB = new Database($this->DBConfig, $this->kernelConfig["debug"]);
@@ -56,7 +100,9 @@ class Kernel {
 
     public function showHeader(): void {
         $cacheHeader = IO::getFileContent($this->cachePath . "/system/header.html");
-        if ($cacheHeader == null || $this->kernelConfig["debug"] == true) {
+        if ($cacheHeader == null || $this->kernelConfig["useCache"] == false) {
+            if ($this->kernelConfig["debug"])
+                echo "Сборка шапки";
             $modulePath = $this->templatesPath . "/modules/headerMenu";
             $header1 = IO::getFileContent($modulePath . "/header_1.html");
             $header2 = IO::getFileContent($modulePath . "/header_2.html");
@@ -75,29 +121,55 @@ class Kernel {
 
             $menuCode = getHeaderMenu($pagesList);
             
-            echo $header1;
-            echo $menuCode;
-            echo $header2;
-
             $cacheHeader = $header1 . $menuCode . $header2;
-            IO::putFileContent(path: $this->cachePath . "/system/", filename:  "header.html", content: $cacheHeader);
+
+            echo $cacheHeader;
+
+            if (!file_exists($this->cachePath . "/system/header.html"))
+                IO::putFileContent(path: $this->cachePath . "/system/", filename:  "header.html", content: $cacheHeader);
         }
         else {
+            if ($this->kernelConfig["debug"])
+                echo "Получение шапки из кэша";
             echo $cacheHeader;
         }
     }
 
     public function showFooter(): void {
         $cacheFooter = IO::getFileContent($this->cachePath . "/system/footer.html");
-        if ($cacheFooter == null || $this->kernelConfig["debug"] == true) {
-            $block = $this->getSystemBlock("systemFooter");
+        if ($cacheFooter == null || $this->kernelConfig["useCache"] == false) {
+            $modulePath = $this->templatesPath . "/modules/footerGenerate";
+            $footer1 = IO::getFileContent($modulePath . "/footer_1.html");
+            $footer2 = IO::getFileContent($modulePath . "/footer_2.html");
+            include_once($modulePath . "/module.php");
 
-            echo $block;
+            $categoryList = $this->DB->getData("categoryList", array("number", "name", "url"));
+            $pagesList = array();
 
-            IO::putFileContent(path: $this->cachePath . "/system/", filename:  "footer.html", content: $block);
+            $j = 0;
+            foreach($categoryList as $i) {
+                $pagesList[$j]["name"] = $i["name"];
+                $pagesList[$j]["url"] = $i["url"];
+                $pagesList[$j]["pages"] = $this->DB->getDataForMenuWithCategory($i["name"]);
+                $j++;
+            }
+
+            $menuCode = generateFooterCode(array($pagesList));
+
+            $cacheFooter = $footer1 . $menuCode . $footer2;
+
+            echo $cacheFooter;
+
+            if (!file_exists($this->cachePath . "/system/footer.html"))
+                IO::putFileContent(path: $this->cachePath . "/system/", filename:  "footer.html", content: $cacheFooter);
+
+            if ($this->kernelConfig["debug"])
+                echo "Сборка подвала";
         }
         else {
             echo $cacheFooter;
+            if ($this->kernelConfig["debug"])
+                echo "Получение подвала из кэша";
         }
     }
 
@@ -118,6 +190,24 @@ class Kernel {
     public function getPageContent(?string $category, ?string $page): string {
         $out = "";
 
+        try {
+            if (!$this->immunity->validateString($page)) {
+                throw new immunity_warning_sql_injection($this->fatalMessages["immunity_warning_sql_injection"]);
+            }
+        }
+        catch (immunity_warning_sql_injection $ex) {
+            $ipAddress = $_SERVER["REMOTE_ADDR"];
+            $httpClient = $_SERVER["HTTP_USER_AGENT"];
+            $this->DB->createNewImmunityIncident(
+                type: "sql-injection",
+                name: $this->immunityMessages["sql-injection-from-url-name"],
+                description: str_replace("#1#", $page, $this->immunityMessages["sql-injection-from-url-description"]),
+                data: $ipAddress,
+                subdata: $httpClient
+            );
+            $this->showFatal($ex->getMessage());
+        }
+
         # try to check fast-get from cache
         $pageGeneralData = $this->DB->getData('pageList', array(
             'name',
@@ -126,10 +216,16 @@ class Kernel {
             'tableName',
             'cacheName',
         ), " WHERE alias = \"$page\";");
-        if ($pageGeneralData['cacheName'] != NULL) {
-            echo "Выводим страницу из кэша";
+        $cacheName = $pageGeneralData[0]['cacheName'];
+        if ($cacheName != NULL && $this->kernelConfig["useCache"]) {
+            if ($this->kernelConfig["debug"])
+                echo "Использование кэша";
+            $cachePath = $this->cachePath . "/pages//" . $cacheName;
+            $out = IO::getFileContent($cachePath);
         }
         else {
+            if ($this->kernelConfig["debug"])
+                echo "Сборка страницы";
             $pageTable = $pageGeneralData[0]["tableName"] . "_Page";
             $pageContent = $this->DB->getData($pageTable, array(
                 'type',
@@ -137,7 +233,12 @@ class Kernel {
                 'data'
             ));
             if ($pageContent == NULL) {
-                $this->showWarning($this->fatalMessages["page_no_found_in_database"], true);
+                $errorMessage = "";
+                if ($this->kernelConfig["debug"])
+                    $errorMessage = $this->fatalMessages["page_no_found_in_database"];
+                else
+                    $errorMessage = $this->kernelInnerWarning;
+                $this->showWarning($errorMessage);
             }
 
             $useDocStyle = false;
@@ -272,16 +373,33 @@ class Kernel {
                             break;
                     }
                     default: {
-                        $this->showWarning($this->fatalMessages["page_block_not_allowed"]);
-                        echo "Block not found! Name: $blockType";
-                        echo "Array: <br><br>";
-                        showArray($pageContent[$pageBlock]);
-                        echo "<br><br> Array end. <br>";
+                        $errorMessage = "";
+                        if ($this->kernelConfig["debug"])
+                            $errorMessage = $this->fatalMessages["page_block_not_allowed"];
+                        else
+                            $errorMessage = $this->kernelInnerWarning;
+                        $this->showWarning($errorMessage);
                             break;
                     }
                 }
             }
-            echo $out;
+            
+            if ($cacheName == NULL) { # Кэширование страницы
+                $cacheFileName = "";
+                $cacheFileNameCreated = false;
+                for($i = 0; $i < 10; $i++) { # Ограничение на 10 попыток генерации названия кэша
+                    $cacheFileName = strval(mt_rand()) . ".html";
+                    if (!file_exists($this->cachePath . "/pages/$cacheFileName")) {
+                        $cacheFileNameCreated = true;
+                        break;
+                    }
+                }
+
+                if ($cacheFileNameCreated) {
+                    IO::putFileContent($this->cachePath . "/pages//", $cacheFileName, $out);
+                    $this->DB->addCacheToPage($page, $cacheFileName);
+                }
+            }
         }
 
         return $out;
@@ -295,7 +413,12 @@ class Kernel {
         
         $dbError = $this->DB->getErrorMSG();
         if ($dbError != "") {
-            $this->showWarning($dbError, isException: true);
+            $errorMessage = "";
+            if ($this->kernelConfig["debug"])
+                $errorMessage = $dbError;
+            else
+                $errorMessage = $this->kernelInnerWarning;
+            $this->showWarning($errorMessage, isException: true);
         }
 
         foreach ($data as $block) {

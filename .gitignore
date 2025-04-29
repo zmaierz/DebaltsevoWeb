@@ -6,3 +6,5 @@ engine/templates/media/files/*
 engine/templates/media/images
 !engine/templates/media/images/logo.jpg
 !engine/templates/media/images/logo_example.gif
+
+test.php

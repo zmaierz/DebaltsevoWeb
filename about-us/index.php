@@ -20,9 +20,8 @@
             <div class="content">
                 <?php
                     $page = $_GET["page"];
-                    echo "Название папки: " . basename(__DIR__) . "<br>Страница: $page";
 
-                    $app->getPageContent(basename(__DIR__), $page);
+                    echo $app->getPageContent(basename(__DIR__), $page);
                 ?>
             </div>
         </div>
