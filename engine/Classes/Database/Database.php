@@ -69,7 +69,7 @@ class Database {
         $out = array();
 
         try {
-            $query = "SELECT * FROM `$this->hostname`.`pageList` WHERE `category` = '$categoryName'";
+            $query = "SELECT * FROM `$this->database`.`pageList` WHERE `category` = '$categoryName'";
             $conn = $this->getConn();
 
             try {
