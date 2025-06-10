@@ -1,0 +1,30 @@
+@media (width <= 1650px) {
+    .header-left-block__name {
+        width: 70%;
+        font-size: 16px;
+    }
+    .header-right-block__menu {
+        padding: 6px 10px;
+    }
+}
+
+@media (width <= 1500px) {
+    .header-menu {
+        gap: 20px;
+    }
+}
+
+@media (width <= 1400px) {
+    .header-menu {
+        gap: 10px;
+    }
+}
+
+@media (width <= 1310px) {
+    .header-menu {
+        gap: 5px;
+    }
+    .header-right-block__menu {
+        padding: 0 5px;
+    }
+}

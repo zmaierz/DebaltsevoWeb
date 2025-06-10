@@ -1,0 +1,25 @@
+.site-fatal {
+    position: fixed;
+    width: 250px;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 20px;
+    border: solid black 1px;
+    background-color: white;
+}
+
+.fatal-container__title {
+    text-align: center;
+    color: red;
+}
+
+.fatal-container__message {
+    margin: 10px;
+    padding: 5px;
+    font-size: 13px;
+    text-align: center;
+    border-radius: 10px;
+    border: solid black 1px;
+    color: white;
+    background-color: red;
+}

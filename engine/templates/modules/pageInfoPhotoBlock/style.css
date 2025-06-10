@@ -1,0 +1,18 @@
+.info__data {
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    border: solid black 1px;
+    border-radius: 15px;
+    background-color: var(--hover-btn);
+}
+
+.info__data-image {
+    width: 100%;
+}
+
+.info__data-image img {
+    width: 100%;
+}

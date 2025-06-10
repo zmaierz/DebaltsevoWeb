@@ -1,0 +1,11 @@
+<?php
+
+function getDBConfig(): array {
+    return [
+        "username" => "", # string
+        "password" => "", # string
+        "hostname" => "", # string
+        "database" => "", # string
+        "port" => 3389 # int
+    ];
+}
