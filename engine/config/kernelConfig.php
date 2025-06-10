@@ -2,7 +2,7 @@
 
 function getKernelConfig(): array {
     return [
-        "debug" =>true, # bool. default: false
+        "debug" =>false, # bool. default: false
         "useCache" => true, # bool. It's not recommended to disable it. default: true
         "modulePath" => "", # string. default: engine/templates/modules
         "templatePath" => "", # string. default: engine/templates
